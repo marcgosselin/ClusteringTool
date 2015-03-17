@@ -1,0 +1,52 @@
+﻿<Page
+    x:Class="CLustering.Test.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CLustering.Test"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:converters="using:CLustering.Test.Converters"  
+    xmlns:ct="using:EasyClustering" 
+    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps" 
+    xmlns:MapControls="using:CLustering.Test.MapObject" 
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <converters:LocationToGeoPointConverter x:Key="LocationToGeoPointConverter"/>
+       
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button  Content="generateMock" Tapped="Button_Tapped"/>
+        </StackPanel>
+
+        <ct:ClusterItem x:Name="clusterToolXaml" 
+                        Zoom="{Binding ZoomLevel,UpdateSourceTrigger=PropertyChanged}" 
+                        Boundaries="{Binding Bounds,UpdateSourceTrigger=PropertyChanged}"
+                        collection="{Binding Items}"
+                        ReloadPoint="{Binding ReloadPoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                        ListPas="{Binding ListPas}"
+                        CenterPoint="{Binding CenterPoint}"/>
+
+        <Maps:MapControl Grid.Row="1" x:Name="map">
+            <Maps:MapItemsControl x:Name="MapItemsControl" 
+                                  ItemsSource="{Binding ElementName=clusterToolXaml,Path=CurrentShownItem}">
+                <Maps:MapItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <MapControls:DefaultControl ViewModel="{Binding}"
+                                                     Maps:MapControl.Location="{Binding Location,Converter={StaticResource LocationToGeoPointConverter}}"
+                                                     />
+                        </Grid>
+                    </DataTemplate>
+                </Maps:MapItemsControl.ItemTemplate>
+            </Maps:MapItemsControl>
+        </Maps:MapControl>
+    </Grid>
+</Page>
