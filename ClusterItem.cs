@@ -392,10 +392,17 @@ namespace EasyClustering
                     longitude = longitude/queryfirst.Count;
                 }
 
+                var bounds = new Bounds()
+                    {
+                        East = queryfirst.Max(x => x.Location.Longitude),
+                        West = queryfirst.Min(x => x.Location.Longitude),
+                        North = queryfirst.Max(x => x.Location.Latitude),
+                        South = queryfirst.Min(x => x.Location.Latitude)
+                    };
 
                 var itemObjet = new ItemObjet()
                 {
-                    item = queryfirst.Count,
+                    item = new ClusterObjet() { Boundaries = bounds, Count = queryfirst.Count, Center = new Location() { Latitude = latitude, Longitude = longitude } },
                     Location = new Location() { Latitude = latitude, Longitude = longitude }
                 };
                 Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>

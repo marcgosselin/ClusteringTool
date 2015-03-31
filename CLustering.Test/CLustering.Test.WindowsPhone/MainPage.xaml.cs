@@ -1,4 +1,5 @@
-﻿using EasyClustering;
+﻿using CLustering.Test.MapObject;
+using EasyClustering;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -214,7 +215,7 @@ namespace CLustering.Test
         }
 
         private async void Button_Tapped(object sender, TappedRoutedEventArgs e)
-        {
+        {            
             map.Children.Clear();
             foreach (var elem in MockData.GenerateMock(1000))
             {
@@ -224,6 +225,27 @@ namespace CLustering.Test
             ZoomLevel = (int)map.ZoomLevel;
             ReloadPoint = true;
             //await clusterToolXaml.GenerateClusterData();
+        }
+
+        private void DefaultControl_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var clusterItem = ((sender as DefaultControl).DataContext as ItemObjet).item as ClusterObjet;
+
+            map.TrySetViewBoundsAsync(
+                new GeoboundingBox(
+                    new BasicGeoposition()
+                    {
+                        Latitude = clusterItem.Boundaries.North,
+                        Longitude = clusterItem.Boundaries.West
+                    },
+                    new BasicGeoposition()
+                    {
+                        Latitude = clusterItem.Boundaries.South,
+                        Longitude = clusterItem.Boundaries.East
+                    }),
+                    new Thickness(5),
+                    MapAnimationKind.Linear);
+
         }
 
     }

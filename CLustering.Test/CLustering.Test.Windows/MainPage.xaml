@@ -24,7 +24,7 @@
 
         <DataTemplate x:Key="ClusterPinDataTemplate">
             <Grid DataContext="{Binding}" Loaded="FrameworkElement_OnLoaded">
-                <bm:Pushpin Background="Red" Tapped="UIElement_OnTapped" Text="{Binding item}">
+                <bm:Pushpin Background="Red" Tapped="UIElement_OnTapped" DataContext="{Binding item}">
 
                 </bm:Pushpin>
                 <bm:MapLayer.Position>

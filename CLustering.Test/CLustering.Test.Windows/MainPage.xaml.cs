@@ -100,7 +100,7 @@ namespace CLustering.Test
             this.InitializeComponent();
             Bounds = new EasyClustering.Bounds();
             items = new EasyClustering.ItemCollection();
-            
+
             //mapItemControlPin.ItemsSource = clusterToolXaml.CurrentShownItem;
             CenterPoint = false;
 
@@ -162,11 +162,43 @@ namespace CLustering.Test
         private void UIElement_OnTapped(object sender, TappedRoutedEventArgs e)
         {
             var current = sender as Pushpin;
-            Debug.WriteLine(current.Text);
-            Debug.WriteLine(String.Format("Count: {0} ; Latitude: {1} ; Longitude: {2}",
-                current.Text,
-                (current.DataContext as ItemObjet).Location.Latitude,
-                (current.DataContext as ItemObjet).Location.Longitude));
+
+            ClusterObjet cluster = current.DataContext as ClusterObjet;
+
+            map.SetView(
+                new LocationRect(
+                    new Bing.Maps.Location()
+                    {
+                        Latitude = cluster.Boundaries.North,
+                        Longitude = cluster.Boundaries.West
+                    },
+                    new Bing.Maps.Location()
+                    {
+                        Latitude = cluster.Boundaries.South,
+                        Longitude = cluster.Boundaries.East 
+                    }));
+
+            //Debug.WriteLine(current.Text);
+            //Debug.WriteLine(String.Format("Count: {0} ; Latitude: {1} ; Longitude: {2}",
+            //    current.Text,
+            //    (current.DataContext as ItemObjet).Location.Latitude,
+            //    (current.DataContext as ItemObjet).Location.Longitude));
+        }
+
+        public double CalculateZoomLevel(LocationRect boundingBox, double buffer, Map map)
+        {
+            double zoom1 = 0, zoom2 = 0;
+
+            //best zoom level based on map width
+            zoom1 = Math.Log(360.0 / 256.0 * (map.ActualWidth - 2 * buffer) / boundingBox.Width) / Math.Log(2);
+
+            //best zoom level based on map height
+            zoom2 = Math.Log(180.0 / 256.0 * (map.ActualHeight - 2 * buffer) / boundingBox.Height) / Math.Log(2);
+
+            //use the most zoomed out of the two zoom levels
+            var zoomLevel = (zoom1 < zoom2) ? zoom1 : zoom2;
+
+            return zoomLevel;
         }
 
         #region INotify

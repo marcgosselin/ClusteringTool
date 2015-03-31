@@ -42,6 +42,7 @@
                         <Grid>
                             <MapControls:DefaultControl ViewModel="{Binding}"
                                                      Maps:MapControl.Location="{Binding Location,Converter={StaticResource LocationToGeoPointConverter}}"
+                                                        Tapped="DefaultControl_Tapped"
                                                      />
                         </Grid>
                     </DataTemplate>

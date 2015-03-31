@@ -42,6 +42,7 @@
     <Compile Include="Animation.cs" />
     <Compile Include="Bounds.cs" />
     <Compile Include="ClusterItem.cs" />
+    <Compile Include="ClusterObjet.cs" />
     <Compile Include="ItemCollection.cs" />
     <Compile Include="ItemObjet.cs" />
     <Compile Include="Location.cs" />
